@@ -1,8 +1,11 @@
 # Weaver ECOA 9.0 Process Engine Form API
 Confidential | Copyright &copy; Weaver Network International Pte. Ltd. 2020
 
-Author: Weaver Singapore Technical Delivery Team
-Date: 1-Jan-2020
+**Author:** Weaver International Technical Delivery Team<br>
+**Date:** 1-Jan-2020<br>
+**Telephone:** +65 6908 5816<br>
+**Email:** sales@weaver.com.sg<br>
+**Website:** www.weaver.com.sg<br>
 
 ## 1. Instruction
 ### 1.1 Description
