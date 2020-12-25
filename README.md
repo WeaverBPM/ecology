@@ -1003,3 +1003,213 @@ var result =WfForm.verifyFormRequired (false, true);// Check fields only must be
 if (! result)
 alert(' there is a situation where it may not be filled in');
 ```
+
+## 7. Specific interface for specified field type  (limit specified field type available)
+### 7.1 extension browse button number interface parameter value 
+> Limit condition: only applicable to non-date browse button type 
+>
+> Scenario: control browse button optional data range, limit range, dependent form field filter data range, etc.; for Lenovo input range and pop-up window selection range; 
+>
+> Implementation: interface expansion parameters will be submitted to the server interface through url parameters, need to modify the browse button interface class to take effect
+>
+> appendBrowserDataUrlParam：function (field Mark, jsonParam)
+
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ | ------------ |
+|fieldMark|String|Yes|field|designation, format field${ field ID}_field${ line number}|
+|jsonParam|JSON|Yes|url|parameters extended, JSON key-value format|
+
+```javascript
+ WfForm.appendBrowserDataUrlParam (" field395",{" customerid ":"2"});// Add url parameter customerid to browse button 395 when requesting background data
+ ```
+ 
+### 7.2 Gets the display valye for browser buttom
+> Limit condition: Only for Non-date browse button only
+>
+> Get multiple browse button value, split string with splitChar
+> 
+> getBrowserShowName：function(fieldMark, splitChar)
+
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ | ------------ |
+|fieldMark|String|Yes|field designation, format field${ field ID}_field${ line number}|
+|splitChar|String|No|delimiter, separated by comma by default|
+
+```javascript
+ WfForm.getBrowserShowName (" field110");// Gets a comma-separated browse button field display value
+ ```
+### 7.3 Remove the option value from slection box
+> Limit condition: Only for selection box
+>
+> removeSelectOption：function only (fieldMark, optionkeys)
+
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ | ------------ |
+|fieldMark|String|Yes|field designation, format field${ field ID}_field${ line number}|
+|optionKeys|String|Yes|Option options key values to be removed, multiple separated by commas|
+
+```javascript
+ WfForm.removeSelectOption (" field 112","3,4");// Removes the option in id selection box with a value of 3/4
+ ```
+ 
+### 7.4 Control selection box field option 
+> Limit condition: Only for selection box
+>
+> controlSelectOption：function only (fieldMark, optionkeys)
+
+
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ | ------------ |
+|fieldMark|String|Yes|field designation, format field${ field ID}_field${ line number}|
+|optionKeys|String|Yes|Fully control the range of options in the selection box|
+
+```javascript
+WfForm.controlSelectOption (" field 112","1,2,4");// The control selection box shows only 1/2/4 options
+WfForm.controlSelectOption (" field 112","");// Clear all options in the box
+```
+
+### 7.5 Gets the display value of the selection box
+>Limit condition: Only for selection box
+>
+> Get multiple selection box value, split string with splitChar
+>
+>getSelectShowName：function(fieldMark, splitChar)
+
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ | ------------ |
+|fieldMark|String|Yes|field designation, format field${ field ID}_field${ line number}|
+|splitChar|String|No|Separator, separated by comma by default (used only with multiple checkboxes)|
+
+```javascript
+ WfForm.getSelectShowName (" field110_3");// Gets the value displayed in the field of the selection box
+ ```
+ 
+### 7.6 When text field is editable, if empty value display default gray prompt, mouse click input prompt disappear
+> Limit condition: only for single line text, integer, floating, multi-line text field (non-html) field type; support main field and detail field 
+>
+> setTextFieldEmptyShowContent：function (fieldMark, showContent)
+
+
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ | ------------ |
+|fieldMark|String|Yes|field designation, format field${ field ID}_field${ line number}|
+|showContent|String|Yes|Hint information displayed when null, gray|
+
+```javascript
+jQuery (document). ready (function (){
+ WfForm.setTextFieldEmptyShowContent (" field 27555"," single text default prompt information 1");
+ WfForm.setTextFieldEmptyShowContent (" field 27566"," Multi-text default prompt 2");
+ WfForm.setTextFieldEmptyShowContent (" field222_0"," detail field prompt information ");// need to be used in conjunction with additional row events in interface 5.9
+});
+```
+
+### 7.7 The props override browse button component 
+> Supports only the browse button type, please use carefully, will completely overrides the browse button props
+>
+> only passes props, the specific passed properties implement what requirements are controlled by internal function
+>
+> overrideBrowserProp: function(fieldMark,jsonParam)
+
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ | ------------ |
+|fieldMark|String|Yes|field designation, format field${ field ID}_field${ line number}|
+|jsonParam|JSON|Yes|Extending or copying props parameters|
+
+```javascript
+Example WfForm.overrideBrowserProp (" field111"){
+ onBeforeFocusCheck：function (success, failure){/***/}
+});// Copy the props of the Browse button field 111
+```
+
+### 7.8 Control Date Browse button date range
+> Minimum version: KB900190501
+>
+> Only support date type, control manual selection of date range 
+>
+> controlDateRange：function (fieldMark, start, end)
+
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ | ------------ |
+|fieldMark|String|Yes|field designation, format field${ field ID}_field${ line number}|
+|start|String|Yes|Support for two formats, the first standard date format, such as 2019-05-28, the second integer, how many days before / after the current date|
+|end|String	No|Format and start parameters consistent|
+
+```javascript
+Example WfForm.controlDateRange (" field111",-5,10);// Limit the optional range of dates, five days forward and 10 days later
+WfForm.controlDateRange (" field111",0,'2019-12-31')// Limit today to this year
+WfForm.controlDateRange (" field222_0",'2019-05-01','2019-05-31');// detail field, limiting the month
+```
+
+### 7.9 Control whether radio button  printing only shows select text
+> Minimum version: KB900190501 
+>
+> only supports single line text box in the selection box, the printing scnario, whether only the selected text is displayed, and the display empty if no selected
+>
+> controlRadioPrintText: function(fieldid)
+
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ | ------------ |
+|fieldMark|String|Yes|fields id, format ${fields ID}, support detail fields|
+
+Example
+```javascript
+WfForm.controlRadioPrintText("12580");// radio field 12580 print text
+```
+
+## 8. Signature comments interface 
+### 8.1 Get signature commments content
+> minimum version: KB900190501
+>
+> getSignRemark：function():
+
+Example
+```javascript
+WfForm.getSignRemark():// Get the signature comments
+```
+
+### 8.2 Set signature comments text
+> Minimum version : KB900190501
+>
+> setSignRemark：function (text, is Clear =true,isAfter=true,callback)
+
+
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ | ------------ |
+|text|String|Yes|Content to be set|
+|isClear|Boolean|No|Whether to clear the opinion first, the default true, is to cover the content of the opinion, false for additional comments|
+|isAfter|Boolean|No|The additional position, default true, the original opinion content tail append, false the head add|
+|callback|Function|No|Callback function after opinion setting is successful|
+
+Example
+```javascript
+WfForm.setSignRemark(" override the content of the signature setting comment ");
+WfForm.setSignRemark (" additional request for approval before the original opinion ", false,false);
+```
+
+### 8.3 Extended Signature comments bottom buttons
+> Signature Input Box Bottom Button supports Custom Extended 
+> 
+> appendSignEditorBottomBar：function (comps =[]) based on built-in accessories, documents, processes)
+
+
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ | ------------ |
+|comps|React Comp Array|Yes|Arrays of React components to be expanded|
+
+```javascript
+WfForm.appendSignEditorBottomBar ([
+ React.createElement (" div ",{ className :" wf-req-signbtn ", children :" custom button 1"}),
+ <div> custom button 2</ div<div>
+]);
+```
