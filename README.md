@@ -605,3 +605,194 @@ ReactDOM.render <div>
      </table>
 </div>, document.getElementByclassName (" area_1");//for reference only, parameter 2 is to distinguish row numbers from specific cells
 ```
+
+## 5. Detail table operation interface
+### 5.1 Add detail table row and set initial value
+> addDetailRow：function (detailMark, initAddRowData ={})
+
+Parameters Description
+
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ |------------ |
+|detailMark	|String	|Yes	|A list indicates that detail 1 is detail_1, incremental analogy|
+|initAddRowData	|JSON	|No	|Set the initial value after adding, in {field110：{value："11"},field112：{value："22"},…}, note key without underlining|
+
+Example 
+```javascript
+// Detail 2 Add a line and assign field111 to the newly added line field
+ WfForm.addDetailRow (" detail_2",{ field111:{ value :" initial value "});    
+// Dynamic field assignment, detail 1 adds a line and assigns a begindate field name
+var begindatefield =WfForm.convertFieldNameToId (" beginate "," detail_1");
+var addObj ={};
+addObj[begindatefield]={ value："2019-03-01"};}
+WfForm.addDetailRow (" detail_1", addObj);
+// Don't recommend this dynamic key writing, IE do n' t support it, avoid it
+WfForm.addDetailRow (" detail_1",{[ beginfield ]:{ value :"2019-03-01"}})
+```
+### 5.2 Delete the detail list indicating line/all line 
+> delDetailRow：function (deleteMark, rowIndexMark)
+> Note: This method empties the details selected and there is no confirmation box indicating whether to delete
+
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ |------------ |
+| detailMark|String|Yes|A list indicates that detail 1 is detail_1, incremental analogy|
+|rowIndexMark|String|Yes|Delete all lines: all, delete some lines :"1,2,3"|
+
+Example
+
+```javascript
+WfForm.delDetailRow (" detail_1"," all ");// Delete all lines in detail 1
+WfForm.delDetailRow (" detail_1","3,6");// Delete line 3,6 in detail 1
+```
+
+### 5.3 Select sepecified row or all row 
+> checkDetailRow: function(detailMark, rowIndexMark,needClearBeforeChecked)
+> Note: This method is flexible and can be used to clear selected logic by needClearBeforeChecked parameters
+Parameter Description	
+
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ |------------ |
+|detailMark	| String |Yes|A list indicates that detail 1 is detail_1, incremental analogy|
+|rowIndexMark|	String |No|	All rows to be selected: all, Central Branch :"1,2,3"|
+|needClearBeforeChecked |	Boolean|No|Need to clear selected|
+
+Example
+
+```javascript
+WfForm.checkDetailRow (" detail_2"," all ");// tick all lines in detail 2
+WfForm.checkDetailRow (" detail_2"," true ";// Clear detail 2 All selected
+WfForm.checkDetailRow (" detail_2","3,6", true);// Clear detail 2 All selected, then tick the row marked 3,6
+ WfForm.checkDetailRow (" detail_2","7", false); 
+// Keep the selected record and append the selected row marked 7
+```
+
+### 5.4 Get all Row Index of detail table
+> getDetailAllRowIndexStr：function (detailMark)
+Parameter Description
+
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ |------------ |
+|detailMark|String|Yes|A list indicates that detail 1 is detail_1, incremental analogy|
+
+Example
+
+```javascript
+console.log (Wform.getDetailAllRowIndexStr (" detail_2");// Output 1.3.etc
+```
+### 5.5 Get selected row index of detail table
+> Minimum Version: KB900190501
+> getDetailCheckedRowIndexStr：function (detail Mark)
+
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ |------------ |
+|detailMark|String|Yes|A list indicates that detail 1 is detail_1, incremental analogy|
+
+Example 
+```javascript
+console.log (Wform.getDetailCheckedRowIndexStr (" detail_2");// output select line 1.3.etc
+```
+
+### 5.6 Controls whether the detail line check box disables the tick
+> note: background configuration of the gray line (not allowed to delete), does not support through this API control 
+> controlDetailRowDisableCheck：function (detailMark, rowIndexMark, disabledCheck)
+
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ |------------ |
+|detailMark|String|true|A list indicates that detail 1 is detail_1, incremental analogy|
+|rowIndexMark|String|Yes|All rows to be selected: all, Central Branch :"1,2,3"|
+|disableCheck|boolean|true|true： not allow; false： allowed|
+
+```javascript
+WfForm.controlDetailRowDisableCheck (" detail_1"," all ", true);// Detail 1 All rows check boxes are not checked
+WfForm.controlDetailRowDisableCheck (" detail_1","1,2", false);
+// Detail 1 row marked 1,2 row release ash, allow tick
+```
+
+### 5.7 Control the display and hide of detail data rows
+> Note: only the interface effect is hidden, the serial number will not change, that is, the front and rear row serial number of the hidden row will be fault discontinuous 
+> controlDetailRowDisplay：function (detail Mark, rowIndex Mark, need Hide)
+
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ |------------ |
+|detailMark|String|true|A list indicates that detail 1 is detail_1, incremental analogy|
+|rowIndexMark|String|Yes|All rows to be selected: all, Central Branch :"1,2,3"|
+|needHide|boolean|true|Hide rows, true： hide, false： display|
+
+```javascript
+WfForm.controlDetailRowDisplay (" detail_1","3,5", true);/The hidden display of line 1 marked 3,5 is not shown
+WfForm.controlDetailRowDisplay (" detail_1"," all ", false);
+// Detail 1 All lines are not hidden
+```
+
+### 5.8 Get database primary key of exisitng field
+> getDetailRowKey：function (fieldMark) for the detail existing rows.
+> This method takes effect only for the detail existing rows, with newly added rows/non-existent rows returning to -1
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ |------------ |
+|fieldMark|String|Yes|field designation, format field${ field ID}_field${ line number} for locating which list belongs|
+```javascript
+WfForm.getDetailRowKey (" field 112_3");// Gets the primary key in the fourth line of detail 
+``` 
+
+### 5.9 Get count of row lines
+
+> getDetailRowCount：function (detail Mark)
+
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ |------------ |
+|detailMark|String|Yes|A list indicates that detail 1 is detail_1, incremental analogy|
+
+Example
+```javascript
+console.log (Wform.getDetailRowCount (" detail_2");// output detail head office number, note that this result only represents detail head office number, can not be used as loop line
+```
+
+### 5.10 Add lines, delete line pre-action(logic or block event)
+> minimum version requirements: KB900190501 
+> scenario: implement custom logic before adding lines, limit how many lines to add invalid, do not allow deletion, etc. 
+> Use registration function mechanism, check details at section 2.1 
+
+### 5.11 Add lines, delete lines post-actions
+> Trigger events using hook mechanism, check detials at section 2.2
+
+### 5.12 Mobile client jump to detail edit line page execution event
+> minimum version requirements: KB900190501
+> only for mobile client edit detail line, hook mechanism, check detials at section 2.2
+
+### 5.13 Add new detail row, copy last line data by default
+> setDetailAddUseCopy：function (detailMark, needCopy)
+> Note: when adding detail: this method is called at ready, the last line field content is automatically assigned when the manual add new row, the settings before the node and the default value are overwritten, and the attachment upload field is not copied. Note: E9 is the asynchronous ready after the execution of the point to add details to take effect, such as the default new empty details invalid;
+Parameter
+Description	Parameter
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ |------------ |
+|detailMark|String|Yes|A list indicates that detail 1 is detail_1, incremental analogy|
+|needCopy|Boolean|Yes|true： enable, false： disable|
+
+```javascript
+jQuery (document). ready (function (){
+     WfForm.setDetailAddUseCopy (" detail_1", true);
+});
+```
+
+### 5.14 Get S/N base on row index
+> Minimum version requirements: KB900190601 
+> scenario: according to the subscript of the line, obtain the current line details, can be used to prompt such a line exception 
+> getDetailRowSerailNum：function (mark, rowIndex)
+
+Description	Parameter
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ |------------ |
+|mark|String|Yes|The list indicates that two formats detail_${ dindex} or fielddetail_${}{ rowIndex} are supported|
+|rowIndex|Int|Yes|Line identification, the first format detail_${ dindex} to pass this parameter|
+
+Example 
+```javascript
+WfForm.getDetailRowSerailNum (" detail_1",3);// Gets a row number marked 3 in detail 1
+WfForm.getDetailRowSerailNum (" field222_3");// Gets the row number marked 3 under the corresponding list of fields 222
+```
