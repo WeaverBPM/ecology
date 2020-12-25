@@ -1213,3 +1213,203 @@ WfForm.appendSignEditorBottomBar ([
  <div> custom button 2</ div<div>
 ]);
 ```
+
+## 9 Common configuration file modifications
+> The following configuration changes are valid for all current ecology system workflow
+### 9.1 Change comment default font-family
+> Default sysadmin account login, change configuration in the browser url calls the interface
+
+*api/workflow/index/updateWfConfig?name=signinput_default_fontfamily&value=仿宋_GB2312/FangSong_GB2312*
+
+> value parameters (font) range
+
+| Font Valye |-	|
+| ------------ | ------------ |
+|仿宋_GB2312/FangSong_GB2312||
+|宋体/SimSun||
+|微软雅黑/Microsoft YaHei||
+|楷体/KaiTi||
+|黑体/SimHei||
+|Arial/Arial, Helvetica, sans-serif	||
+|新宋体/NSimSun||
+|楷体_GB2312/KaiTi_GB2312||
+## 9.2 Modify the default font size of signature comments
+> sysadmin account login, in the browser to call the interface to modify the configuration
+
+*api/workflow/index/updateWfConfig?// name=signinput_default_fontsize&value=36/36px*
+
+> value parameter (font size) range
+
+|Font Size| - | - | - |
+| ------------ | ------------ | ------------ | ------------ |
+|8/8px|9/9px|10/10px|px 11|
+|12/12px|14/14px|16/16px|18/18px|
+|20/20px|22/22px|24/24px|26/26px|
+|28/28px|36/36px| - | - |	
+
+### 9.3 Process custom browse box cache function switch
+> sysadmin access link modification configuration, real-time effect
+
+*api/workflow/index/updateWfConfig?name=un_use_customize_browser_cache&value=0*
+
+> value parameter 1 closes ,0 opens 
+>
+> cache task parameters and cleans data cache pages (task functions: save forms, open forms for custom browse box data caching and refresh, and clean custom browse box cache data bulk cleaning and single process cleaning)
+
+*/workflow/request/CustomizeBrowserCacheUtil.jsp*
+
+### 9.4 non-multiline text html field types support html format 
+> scenarios: E9 limits the content to support html formats only if the field type is multiline text and check the field
+> 
+> A single-line text field, a multi-line text field, is not supported, but in some scenarios such field values are assigned through html external interface, etc
+This can be done by reconfiguring
+
+**Step 1:**
+Find fields that need to support html format id( see the lower right corner through the Form Designer Template Cell (s), Suppose the field id is 12345, the format is: field12345_1
+(In the case of an old form, the format is to select the generated form from the field library field12345_0, the old form refers to the field, usually before E8 system)
+
+**Step 2: Perform SQL(different databases convert splices)**
+```sql
+update workflow_config set value=value||, field12345_1'where name=‘support_html_textarea_field'
+```
+**Step 3: Restart resin effective** 
+
+### 9.5 PC web-process form display  time-consuming information at button (debug analysis)
+> minimum version requirements: KB900190801
+>
+> sysadmin access link modification configuration, real-time effect
+
+*api/workflow/index/updateWfConfig?name=show_duration_log&value=1*
+
+> value parameter 1 on ,0 off, default closed
+
+### 9.6 When the horizontal scroll bar is enable in detail table, the first line (where the button is located) is fixed without following the scroll bar rolling 
+> minimum version requirement: KB900191101
+>
+> Scenario: detail open horizontal scroll bar, first line does not contain type other than button/text, first line contains add delete button and is in non-column locked area
+>
+> Meet the above 3 conditions, the first row will be fixed, not follow the horizontal scroll bar rolling
+>
+> There may be an inconsistency between the first line and the next line depending on the template
+>
+> sysadmin access link modification configuration, real-time effect
+
+*api/workflow/index/updateWfConfig?name=detail_locked_button_row&value=1*
+
+> value parameter 1 lock ,0 unlock, default lock
+### 9.7 The detail fields sum total assign to the main field, when the detail does not add rows, assign zero or null 
+> scenarios: configure the columns aggregate to the main field, when the detail does not add rows, the main table aggregates fields
+>
+> Some scenarios need to be assigned empty to check the required
+>
+> Certain scenarios need to be assigned to zero for export check
+>
+> sysadmin access link modification configuration, effective in real time
+
+api/workflow/index/updateWfConfig?name=colRule_noRow_empty&value=1 
+
+> value parameter 1 assigns zero value and 0 null value by default
+
+### 9.8 PC Client - Handwritten Signature Switch 
+> Minimum Version : KB900191001
+>
+> sysadmin access link modification configuration, real-time effect
+
+api/workflow/index/updateWfConfig?name=handwrittensign_switch&value=1 
+> value parameter 1 on ,0 off
+### 9.9 Mobile - Select box type displayed as radio effect switch 
+> minimum version: KB900191101:
+>
+> sysadmin access link modification configuration, real-time effect
+
+api/workflow/index/updateWfConfig?name=mobile_show_radio&value=1 
+
+>value parameter 1 on ,0 off, default closed
+
+### 9.10 Mobile-form text, attachment signature  
+> minimum version: KB900190308
+>
+>Change configuration file: MobileWFOfficeSign.properties
+
+**mobileWFOffice=1**
+>mobileWFOffice parameter 1 open 0 close, after opening display sign approval button, otherwise do not display sign approval button
+
+**mobilePDFSign=1**
+>mobilePDFSign Minimum version requirements: KB900190901
+>
+>mobilePDFSign configuration items are only valid for pdf files
+>
+>mobilePDFSign parameter 1 pdf after the document is signed and approved, parameter 2 is placed in the attachment of the signature opinion. After the document is signed and approved, the original document parameter 3 is replaced directly by the user's choice to sign and approve, and then placed in the attachment of the signature opinion or replace the original document
+
+## 10 Common CSS style case sharing 
+> Base on customer requirement, the style could be changed flexible
+>
+> For the current template only --> write in the code block
+>
+> Only valid for all nodes of the current workflow --> written on the workflow basic settings - Custom page (CSS file)
+>
+> Take effect on all system workflows-> write in application settings-global custom page (CSS file) 
+>
+> Note: if you write in a code block, you need to wrap a layer of style label, no need in CSS file
+
+### 10.1 Detail add delete button to display on the left
+> scenarios: detail add delete button, always right display, how to achieve left display
+Insert style to code block :
+```javascript
+<style>
+.detailButtonDiv{float：left}
+</style>
+```
+
+No label is required if edit in css file
+
+```css
+.detailButtonDiv{float：left}
+```
+
+### 10.2 Image in cell align center, adaptive scaling
+> Scenario: inserts images in cell, always tiled from top left, how to center, how to scale adaptively
+>
+> Minimum Version Requirements: KB900190901
+Add custom attributes class identification to the cell where the picture is located:
+```css
+imageCell
+```
+
+The cell width is larger than the picture size, aligen picture in centere, add below style:
+```css
+.imageCell_swap{background-position：center}
+```
+The width of the cell is smaller than the size of the picture, image adaptive zoom display with cell, adding style:
+```css
+.imageCell_swap{background-size：100%100%}
+```
+
+### 10.3 Control Browse button link color
+> Scenario: Browse button link color is not controlled by cell color, how to modify browse button link color
+
+**Option 1: KB900190901 or more required**
+Access the following link through the sysadmin account, to start configuration, after opening the browse button link color completely take the cell set color
+> api/workflow/index/updateWfConfig?name=browser_color_controlByCell&value=1
+(value parameter 0 closes ,1 turns on, default closes)
+**Option 2: No system version limitation**
+Add custom attributes class identification to the cell where the Browse button is located:
+```css
+browserColorCell
+```
+Added style
+```css
+.browserColorCell a{color：red! important}// force a link to the browse button to appear in red
+```
+
+### 10.4 Control the minimum width of the main table selection box field
+> Scenario: main table selection box field, minimum width requirement 100 px, when the selected item is only "yes / no ", how to reduce the width again
+Add a custom attribute class identification to the cell where the selection box is located:
+```css
+selectCell
+```
+Added style
+
+```css
+.selectCell .wea-select{min-width：50px! important}
+```
