@@ -631,6 +631,7 @@ WfForm.addDetailRow (" detail_1",{[ beginfield ]:{ value :"2019-03-01"}})
 ```
 ### 5.2 Delete the detail list indicating line/all line 
 > delDetailRow：function (deleteMark, rowIndexMark)
+>
 > Note: This method empties the details selected and there is no confirmation box indicating whether to delete
 
 |Parameter |type	|Required|	Remarks|
@@ -647,6 +648,7 @@ WfForm.delDetailRow (" detail_1","3,6");// Delete line 3,6 in detail 1
 
 ### 5.3 Select sepecified row or all row 
 > checkDetailRow: function(detailMark, rowIndexMark,needClearBeforeChecked)
+>
 > Note: This method is flexible and can be used to clear selected logic by needClearBeforeChecked parameters
 Parameter Description	
 
@@ -681,9 +683,11 @@ console.log (Wform.getDetailAllRowIndexStr (" detail_2");// Output 1.3.etc
 ```
 ### 5.5 Get selected row index of detail table
 > Minimum Version: KB900190501
+>
 > getDetailCheckedRowIndexStr：function (detail Mark)
 
 Parameter Description
+
 |Parameter |type	|Required|	Remarks|
 | ------------ | ------------ | ------------ |------------ |
 |detailMark|String|Yes|A list indicates that detail 1 is detail_1, incremental analogy|
@@ -695,6 +699,7 @@ console.log (Wform.getDetailCheckedRowIndexStr (" detail_2");// output select li
 
 ### 5.6 Controls whether the detail line check box disables the tick
 > note: background configuration of the gray line (not allowed to delete), does not support through this API control 
+>
 > controlDetailRowDisableCheck：function (detailMark, rowIndexMark, disabledCheck)
 
 Parameter Description
@@ -712,6 +717,7 @@ WfForm.controlDetailRowDisableCheck (" detail_1","1,2", false);
 
 ### 5.7 Control the display and hide of detail data rows
 > Note: only the interface effect is hidden, the serial number will not change, that is, the front and rear row serial number of the hidden row will be fault discontinuous 
+>
 > controlDetailRowDisplay：function (detail Mark, rowIndex Mark, need Hide)
 
 Parameter Description
@@ -729,11 +735,14 @@ WfForm.controlDetailRowDisplay (" detail_1"," all ", false);
 
 ### 5.8 Get database primary key of exisitng field
 > getDetailRowKey：function (fieldMark) for the detail existing rows.
+>
 > This method takes effect only for the detail existing rows, with newly added rows/non-existent rows returning to -1
 Parameter Description
+
 |Parameter |type	|Required|	Remarks|
 | ------------ | ------------ | ------------ |------------ |
 |fieldMark|String|Yes|field designation, format field${ field ID}_field${ line number} for locating which list belongs|
+
 ```javascript
 WfForm.getDetailRowKey (" field 112_3");// Gets the primary key in the fourth line of detail 
 ``` 
@@ -754,7 +763,9 @@ console.log (Wform.getDetailRowCount (" detail_2");// output detail head office 
 
 ### 5.10 Add lines, delete line pre-action(logic or block event)
 > minimum version requirements: KB900190501 
+>
 > scenario: implement custom logic before adding lines, limit how many lines to add invalid, do not allow deletion, etc. 
+>
 > Use registration function mechanism, check details at section 2.1 
 
 ### 5.11 Add lines, delete lines post-actions
@@ -762,13 +773,19 @@ console.log (Wform.getDetailRowCount (" detail_2");// output detail head office 
 
 ### 5.12 Mobile client jump to detail edit line page execution event
 > minimum version requirements: KB900190501
+>
 > only for mobile client edit detail line, hook mechanism, check detials at section 2.2
 
 ### 5.13 Add new detail row, copy last line data by default
 > setDetailAddUseCopy：function (detailMark, needCopy)
-> Note: when adding detail: this method is called at ready, the last line field content is automatically assigned when the manual add new row, the settings before the node and the default value are overwritten, and the attachment upload field is not copied. Note: E9 is the asynchronous ready after the execution of the point to add details to take effect, such as the default new empty details invalid;
+>
+> When adding detail: this method is called at ready, the last line field content is automatically assigned when the manual add new row, the settings before the node and the default value are overwritten, and the attachment upload field is not copied.
+>
+>Note: E9 is the asynchronous ready after the execution of the point to add details to take effect, such as the default new empty details invalid;
 Parameter
+
 Description	Parameter
+
 |Parameter |type	|Required|	Remarks|
 | ------------ | ------------ | ------------ |------------ |
 |detailMark|String|Yes|A list indicates that detail 1 is detail_1, incremental analogy|
@@ -781,8 +798,10 @@ jQuery (document). ready (function (){
 ```
 
 ### 5.14 Get S/N base on row index
-> Minimum version requirements: KB900190601 
+> Minimum version requirements: KB900190601
+>
 > scenario: according to the subscript of the line, obtain the current line details, can be used to prompt such a line exception 
+>
 > getDetailRowSerailNum：function (mark, rowIndex)
 
 Description	Parameter
