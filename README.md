@@ -815,3 +815,191 @@ Example
 WfForm.getDetailRowSerailNum (" detail_1",3);// Gets a row number marked 3 in detail 1
 WfForm.getDetailRowSerailNum (" field222_3");// Gets the row number marked 3 under the corresponding list of fields 222
 ```
+
+## 6. common global interface
+
+### 6.1 get the basic information of the current open request
+> Description: including workflow id、 node id、 form id, primary and secondary account information
+>
+> getBaseInfo：function()
+
+```javascript
+console.log (Wform.getBaseInfo ();// Returns the underlying information for the current request 
+// Output description:
+{
+     f_weaver_belongto_userid："5240"//user information 
+     f_weaver_belongto_usertype："0"
+     formid：-2010// form id
+     isbill："1"// new/old form 
+     nodeid：19275// node id 
+     id requestid：4487931// request id
+     workflowid：16084// workflow id 
+}
+```
+
+### 6.2 Contorl message display duration
+
+> showMessage：function controlling display time (msg, type, duration)
+
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ | ------------ |
+|msg|String|true|Information content|
+|type|int|false|Prompt type ,1(warning),2(error),3(success),4(general), default is 1, different types of prompt messages have different effects|
+|duration|Float|false|How long automatically disappears, per second, default is 1.5 seconds|
+
+```javascript
+WfForm.showMessage(" end time should be greater than start time ")// warning information should disappear automatically after 1.5 s "); and
+WfForm.showMessage(" operation error ",2,10);// error message disappeared after 10s
+```
+
+### 6.3 System style Confirm message box description
+> Note: compatible with mobile, custom confirmation content and button name
+>
+> showConfirm：function (content, okEvent, cancelEvent, otherInfo ={})
+
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ | ------------ |
+|content|String|Yes|Confirmation of information|
+|okEvent|Function|Yes|Click Confirm Event|
+|cancelEvent|Function|No|Click Cancel Event|
+|otherInfo|Object|No|Custom information (button name)|
+
+```javascript
+WfForm.showConfirm (" confirm to delete? ", function(){
+     alert(" Delete successfully "); 
+});
+WfForm.showConfirm (" Do you need any technical support? ", function(){
+     alert("Click confirm to call some functions or trigger some event");
+}, function(){
+     alert(Click Cancel to call some functions or trigger some event);
+},{
+     title："Confirmation "// The title, valid on PC only
+     okText："Need "// custom confirmation button name 
+     cancelText："No need" // custom cancel button name 
+});
+```
+
+### 6.4 Form Top Button, Right-click Menu set disable
+> Description: Set Form Top Button, Right-click Menu disable and restore to enable
+>
+> isDisabledcontrolBtnDisabled：function (isDisabled)
+
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ | ------------ |
+|isDisabled|boolean|Yes|true：button all disable can not be operated, false： recovery button can be operated|
+
+```javascript
+     function subimtForm (params){
+         WfForm.controlBtnDisabled (true);// action button ash 
+        ...
+         WfForm.controlBtnDisabled (false);
+    }
+```
+	
+### 6.5 Right click event
+> Description: call right-click event logic, call only, do not allow override
+>
+> doRightBtnEvent：function (type)
+
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ | ------------ |
+|type|String|Yes|Button|type (console can be mobx.toJS (Wform.getGlobalStore (). rightMenu.rightMenus) type)|
+
+```javascript
+WfForm.doRightBtnEvent (" BTN_SUBBACKNAME ");// Feedback required to trigger submission
+WfForm.doRightBtnEvent (" BTN_SUBMIT ");// no feedback required to trigger submission
+WfForm.doRightBtnEvent (" BTN_WFSAVE ");// Trigger save
+WfForm.doRightBtnEvent (" BTN_REJECTNAME ");// trigger return
+WfForm.doRightBtnEvent (" BTN_FORWARD ");// Trigger forwarding
+WfForm.doRightBtnEvent (" BTN_REMARKADVICE ");// Trigger Consultation
+WfForm.doRightBtnEvent (" BTN_TURNTODO ");// Trigger transfer
+WfForm.doRightBtnEvent (" BTN_DORETRACT ");// Trigger forced recovery
+WfForm.doRightBtnEvent (" BTN_PRINT ");// Trigger print
+```
+
+### 6.6 Refresh the form page 
+> force refresh the form page, default to current requestid
+>
+> reloadPage：function (params ={})
+
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ | ------------ |
+|params|Object|No|Custom parameters, overrides default parameters|
+
+```javascript
+WfForm.reloadPage();
+WfForm.reloadPage ({requestid :"11"});// coverage parameters
+```
+
+### 6.7 Mobile app open link method
+> Only supports the mobile side, especially the non-main form user interface (for example: detail editing) needs to open the link in this way. By opening the link this way, the return does not refresh the form 
+>
+> window.showHoverWindow：function (url, baseRoute)
+
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ | ------------ |
+|url|String|Yes|Open link address|
+|baseRoute|String|Yes|The current routing address is specified in the url address, and the detail edit opens the req/editDetailRow'/ pass|
+
+Example 
+
+```javascript
+window.showHoverWindow ('/workflow/test.jsp','/req');// main interface opens the link
+window.showHoverWindow (' https://www.baidu.com','/req/editDetailRow'');// The detail line edit interface opens the link
+```
+
+### 6.8 Extend parameters send to server
+> Minimum version:KB900190801
+>
+> Custom extension parameters sent to the server, the server can take the corresponding parameter value recommendation by request.getParameter
+>
+>Suggest: the extended custom parameters start with cus_, Avoid affecting / covering the parameters necessary for standard products, resulting function abnormal
+>
+> appendSubmitParam：function (obj ={})
+
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ | ------------ |
+|obj|Object|No|JSON Format Custom Parameters|
+
+```javascript
+WfForm.appendSubmitParam ({cus_param1:"11", cus_param2:" Test "});// The server can take parameter value request.getParameter through the request object (" cus_param1"):
+```
+
+### 6.9 Get the first required field
+> Minimum version: KB900191201
+>
+> scenario: call the required verification logic of the product to obtain the first field that may not be filled in;<br>
+> For example, work with WfForm.OPER_BEOPER_BEFOREVERIFY in section 2.1 to control custom control prompts
+>
+> getFirstRequiredEmptyField：function()
+
+```javascript
+var emptyField =WfForm.getFirstRequiredEmptyField()// Gets the first field not necessarily filled in at the call time, and the return value format is `field${ fieldid}_$}{}{}}}{ 
+```
+
+### 6.10 Trigger one time required verification
+> minimum version: KB900191201 
+>
+> manually trigger one time required field verification and prompt, optional control check must add empty detail / check field required 
+>
+> verifyFormRequired：function (mustAddDetail =true,fieldRequired=true)
+
+Parameter Description
+|Parameter |type	|Required|	Remarks|
+| ------------ | ------------ | ------------ | ------------ |
+|mustAddDetail|Boolean|No|Check whether you must add an empty detail by default|
+|fieldRequired|Boolean|No|Check fields must be filled in by default|
+
+```javascript
+WfForm.verifyFormRequired();/ trigger must fill in verification and prompt, check must add empty details first, then check field must fill in
+var result =WfForm.verifyFormRequired (false, true);// Check fields only must be filled in and prompted
+if (! result)
+alert(' there is a situation where it may not be filled in');
+```
