@@ -284,10 +284,12 @@ Parameter Description
 |Parameter |type	|Required|	Remarks|
 | ------------ | ------------ | ------------ |------------ |
 |fieldMark	|String|	Yes	|field designation, format field${ field ID}_field${ line number}|
-|viewAttr	|int	|Yes	|Change the status of the field ,1: Read Only ,2: Edit ,3: Required ,4: Hide the field label and content|
+|viewAttr	|int	|Yes	|Change the status of the field ,1: ReadOnly ,2: Edit ,3: Required ,4: Hidden the field label and content|
+
+Example 
 ```javascript
-Example WfForm.changeFieldAttr (" field 110",1);// field changed to read-only
-WfForm.changeFieldAttr (" field 110",4);// field label and content are hidden, the effect is consistent with the display attribute hidden, only support the main table field
+WfForm.changeFieldAttr (" field110",1);// field changed to read-only
+WfForm.changeFieldAttr (" field110",4);// field label and content are hidden, the effect is consistent with the display attribute hidden, only support the main table field
 ```
 
 ### 3.5 Modify field values and display propert
