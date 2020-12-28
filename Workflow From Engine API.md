@@ -148,7 +148,7 @@ Example
 ```javascript
 jQuery(). ready (function (){
  WfForm.registerCheckEvent (Wform.OPER_SAVE, function (callback){
- jQuery ("# field 27495"). val(" Save automatic assign value");
+ jQuery ("#field27495").val(" Save automatic assign value");
  callback()// continue to submit to callback, no callbacck means break
     });
  WfForm.registerCheckEvent (Wform.OPER_SAVE +,"+WfForm.OPER_SUBMIT,function (callback){
@@ -223,9 +223,9 @@ Parameter Description
 
 Example
 ```javascript
-var fieldid =WfForm.convertFieldNameToId (" zs ");
-var fieldid =WfForm.convertFieldNameToId (" zs_mx "," detail_1");
-var fieldid =WfForm.convertFieldNameToId (" zs_mx "," detail_1", false);
+var fieldid =WfForm.convertFieldNameToId ("zs");
+var fieldid =WfForm.convertFieldNameToId ("zs_mx","detail_1");
+var fieldid =WfForm.convertFieldNameToId ("zs_mx","detail_1", false);
 ```
 
 ### 3.2 Gets a single field value 
@@ -239,7 +239,7 @@ Parameter Description
 
 Example 
 ```javascript
-var fieldvalue =WfForm.getFieldValue (" field110");
+var fieldvalue = WfForm.getFieldValue ("field110");
 ```
 
 3.3 Modify a single field value 
@@ -257,9 +257,9 @@ Parameter Description
 Example 
 ```javascript
 // Modify field types such as text boxes, multi-line text, selection boxes, etc
-WfForm.changeFieldValue (" field123",{ value :"1.234"});
+WfForm.changeFieldValue ("field123",{ value :"1.234"});
 // Modify the value of the browse field to have specialobj array structure objects
-WfForm.changeFieldValue (" field 11_2"),{
+WfForm.changeFieldValue ("field 11_2"),{
  value："2,3",
  specialobj：[
  	{id："2",name：" Zhang San},
@@ -267,9 +267,9 @@ WfForm.changeFieldValue (" field 11_2"),{
     ]
 });     
 // Modify the check box field (0 unchecked ,1 checked)
- WfForm.changeFieldValue (" field123",{ value :"1"});
+ WfForm.changeFieldValue ("field123",{ value :"1"});
 // For single-line text-box type, read-only, support display values that are inconsistent with library values
-WfForm.changeFieldValue (" field123"),{
+WfForm.changeFieldValue ("field123"),{
  value："  actual value of storage ",
  specialobj：{
  showhtml：" interface display value "
@@ -288,8 +288,8 @@ Parameter Description
 
 Example 
 ```javascript
-WfForm.changeFieldAttr (" field110",1);// field changed to read-only
-WfForm.changeFieldAttr (" field110",4);// field label and content are hidden, the effect is consistent with the display attribute hidden, only support the main table field
+WfForm.changeFieldAttr ("field110",1);// field changed to read-only
+WfForm.changeFieldAttr ("field110",4);// field label and content are hidden, the effect is consistent with the display attribute hidden, only support the main table field
 ```
 
 ### 3.5 Modify field values and display propert
@@ -348,7 +348,7 @@ Parameter Description
 ```javascript
 // form opens the linkage to enforce a field linkage
 jQuery (document). ready (function (){
- WfForm.triggerFieldAllLinkage (" field110");// execute all linkage involved in the  field
+ WfForm.triggerFieldAllLinkage ("field110");// execute all linkage involved in the  field
 });
 ```
 
@@ -392,7 +392,7 @@ Parameter Description
 |fieldMark	|String|	Yes	|field designation, format field${ field ID}_field${ line number}|
 
 ```javascript
- WfForm.getFieldCurViewAttr (" field 110_2");// Get detail field properties ,1: read-only ,2: editable ,3: required; all done read-only;
+ WfForm.getFieldCurViewAttr ("field 110_2");// Get detail field properties ,1: read-only ,2: editable ,3: required; all done read-only;
 ```
 
 
@@ -412,7 +412,7 @@ Parameter Description
 |funobj|	Function|	Yes|	The function passes the following three parameters by default, parameter 1: the DOM object of the trigger field, parameter 2: the mark of the trigger field (field27555, etc.), parameter 3: the modified value|
 
 ```javascript
-WfForm.bindFieldChangeEvent (" field 27555, field 27556", function (obj, id, value){
+WfForm.bindFieldChangeEvent ("field27555, field27556", function (obj, id, value){
  console.log (" Wform.bindFieldChange Event --", obj, id, value);
 });
 ```
