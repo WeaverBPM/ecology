@@ -39,9 +39,9 @@ boolean isMobile = "true". equals (request.getParameter ("_ec_ismobile "); //tru
 ```
 
 ### 1.3 Front-end Development
-> Mode 1: code blocks in each layout tempalte, individually configured on display/print/mobile templates for individual nodes
+> Mode 1: code blocks in each layout template, individually configured on display/print/mobile templates for individual nodes
 > 
-> Mode 2: workflow_base table custompage, for all nodes in the current path, display and print and mobile<br>Note that the process may have values if associated with budgets, attendance, vehicles, etc.
+> Mode 2: workflow_base table custompage, for all nodes in the current workflow, display and print and mobile<br>Note that the process may have values if associated with budgets, attendance, vehicles, etc.
 > 
 > Mode 3: *Workflow management->Application settings->Process Form User-defined Page* for all non-template scenarios (PC and movement). Note that this page is global custompage, avoid writing global functions such as ready、checkCustomize, and define only some function bodies
 > 
@@ -50,12 +50,12 @@ boolean isMobile = "true". equals (request.getParameter ("_ec_ismobile "); //tru
 > When the configuration does not take effect, please write the code block / custompage only alert confirmation method to check whether it takes effect, and then debug the cause of the error step by step.
 
 ### 1.4 PC way to open the form
-> New request: system auto get the  active workflow version base on the workflow id
+> New request: System will be automatically retrieve the active workflow version base on the workflow id
 
 ```javascript
 window.open("/workflow/request/CreateRequestForward.jsp?workflowid=747");
 ```
-> View request: user must have this request view permission, the primary and secondary account acccount must be in link. The parameter is request ID
+> View request: User must have this request view permission, the primary and secondary account acccount must be in link. The parameter is request ID
 
 ```javascript
 window.open("/workflow/request/ViewRequestForwardSPA.jsp?requestid=5963690");
@@ -73,8 +73,8 @@ var viewUrl = "spa/workflow/forwardMobileForm.html?/ requestid=4503066";
 ```
 >**First method** (recommended): Call the package method
 >If the module is packaged with mobile framework, it can be called directly
->When it's a self-developed interface, you need to call / spa/coms/openLink.js a 
-> minimum support system version: KB900190601
+>When it's a self-developed interface, you need to call /spa/coms/openLink.js 
+> Minimum support system version: KB900190601
 > openLink.openWorkflow (url, callbackFun, returnUrl)
 
 | Parameters | Parameter type | Remarks |
@@ -85,10 +85,10 @@ var viewUrl = "spa/workflow/forwardMobileForm.html?/ requestid=4503066";
 
 ```javascript
 window.openLink.openWorkflow (createUrl,function(){
- alert (" E-mobile opens the form link and triggers this callback function after return/submit ");
+ alert ("E-mobile opens the form link and triggers this callback function after return/submit");
 });
-// Non- EM open, return/submit then back to the process center
-window.openLink.openWorkflow (createUrl,null,"/spa/workflow/static4mobile/index.html#/center/doing");
+// Non-EM open, return/submit then back to the process center
+window.openLink.openWorkflow(createUrl,null,"/spa/workflow/static4mobile/index.html#/center/doing");
 ```
 > **Second Method**: EM client only, open the form and control the return/submission event callback<br>Use of EM-SDK, call webview to realize
 
@@ -102,12 +102,12 @@ window.em.ready (function(){
  window.em.registerBroadcast ({
  name："_closeWfFormCallBack",
  action：function (argument){
- alert (" E-mobile opens the form link and triggers this callback function after return/submit ");
+ alert ("E-mobile opens the form link and triggers this callback function after return/submit");
       }
     });
 });
 ```
-> **Third Method**: window.open / window.location.href redirect <br>This way url you need to pass parameters returnUrl and transcode to specify the return / submit address.<br>If it is EM client to use mode one or mode two!
+> **Third Method**: window.open/window.location.href redirect <br>This way url you need to pass parameters returnUrl and transcode to specify the return/submit address.<br>If it is EM client to use mode one or mode two!
 
 ```javascript
 window.open (viewUrl +"& returnUrl="+window.encodeURIComponent "/test.jsp?param1=test11&param2=test22"));
@@ -115,7 +115,7 @@ window.open (viewUrl +"& returnUrl="+window.encodeURIComponent "/test.jsp?param1
 
 ## 2. Register user-define event 
 ### 2.1 Register intercept event, specify action pre-execution trigger, and block/release follow-up actions 
-> support multiple registrations, execute in order of registration; support asynchronous ajax, avoid request jam
+> Support multiple registrations, execute in order of registration; support asynchronous ajax, avoid request jam
 > Scenario 1: perform custom logic and block/release before submi, save, returnn, forward, withdraw, etc
 > Scenario 2: execute custom logic and block/allow follow-up action before add/detele detail row
 
@@ -146,24 +146,24 @@ Interface name and parameter description
 
 Example 
 ```javascript
-jQuery(). ready (function (){
- WfForm.registerCheckEvent (Wform.OPER_SAVE, function (callback){
+jQuery(). ready (function(){
+ WfForm.registerCheckEvent (Wform.OPER_SAVE, function(callback){
  jQuery ("#field27495").val(" Save automatic assign value");
  callback()// continue to submit to callback, no callbacck means break
     });
- WfForm.registerCheckEvent (Wform.OPER_SAVE +,"+WfForm.OPER_SUBMIT,function (callback){
+ WfForm.registerCheckEvent (Wform.OPER_SAVE +,"+WfForm.OPER_SUBMIT,function(callback){
  //... Execute user-defined logic
  callback();
     });
- WfForm.registerCheckEvent (Wform.OPER_ADDROW +"1", function (callback){
+ WfForm.registerCheckEvent (Wform.OPER_ADDROW +"1", function(callback){
  alert (" execute logic before adding detail 1, detail 1 is OPER_ADDROW+1, and so on ");
  callback()// Allows you to continue adding row calls callback, else break
     });
- WfForm.registerCheckEvent (Wform.Oper_DELROW +"2", function (callback){
+ WfForm.registerCheckEvent (Wform.Oper_DELROW +"2", function(callback){
  alert(" Execution logic before deleting detail 2");
  callback();// Allows continued deletion of line calls callback, else break
     });
- WfForm.registerCheckEvent (Wform.OPER_PRINTPREVIEW, function (callback){
+ WfForm.registerCheckEvent (Wform.OPER_PRINTPREVIEW, function(callback){
  alert(" Control default print preview window ");
  alert(" this interface needs to be executed before the jump route, the component library provides this mechanism when the component library provides this mechanism ");
  window.WfForm.printTimeout =3000;// product is the default delay 1s to pop-up, can control the delay time here
@@ -175,8 +175,8 @@ callback();// Allows continued pop-up calls callback, else break
     });
 });
 ```
-### 2.2 Register hook event, trigger after specific  action completed
->  support multiple call registration  and execute in order of registration
+### 2.2 Register hook event, trigger after specific action completed
+> Support multiple call registration and execute in order of registration
 
 |Type	|Note	|Minimum Version |
 | ------------ | ------------ | ------------ |
@@ -187,7 +187,7 @@ callback();// Allows continued pop-up calls callback, else break
 |WfForm.ACTION_SWITCHTABLAYOUT	|Switch template layout tab	|KB900191201|
 
 Interface name and parameter description 
-> registerAction：function (actionname, fn)
+> registerAction：function(actionname, fn)
 
 |Parameters	 |type	|Required	|Remarks|
 | ------------ | ------------ | ------------ |------------ |
@@ -195,16 +195,16 @@ Interface name and parameter description
 |fn	|Function	|Yes	|Trigger event|
 Example
 ```javascript
-WfForm.registerAction (Wform.ACTION_ADDROW +"1", function (index){
+WfForm.registerAction (Wform.ACTION_ADDROW +"1", function(index){
  alert (" Add line subscript" +index);
 // subscript from 1, detail 1 add line trigger event, register function entry parameter is new line subscript
-WfForm.registerAction (Wform.ACTION_DELROW +"2", function (arg){
+WfForm.registerAction (Wform.ACTION_DELROW +"2", function(arg){
  alert (" Delete row subscript set is "+arg.join(","");
 });// subscript from 1, detail 2 delete line trigger event
 WfForm.registerAction (Wform.ACTION_SWITCHDETAILPAGING, function (groupid){
  Page number trigger event alert (" Switching detail table page "+(groupid+1) +"trigger event");
 });
-WfForm.registerAction (Wform.ACTION_SWITCHTABLAYOUT, function (tabid){
+WfForm.registerAction (Wform.ACTION_SWITCHTABLAYOUT, function(tabid){
  alert (" Switch to tag item "+tabid+" Trigger event ");
 });
 ```
@@ -276,15 +276,15 @@ WfForm.changeFieldValue ("field123"),{
     }
 });
 ```
-### 3.4 Change the single field display properties (read-only/required, etc.) 
+### 3.4 Change the single field display properties (read-only/mandatory, etc.) 
 > changeFieldAttr：function (fieldMark, viewAttr)
 
 Parameter Description
 
 |Parameter |type	|Required|	Remarks|
 | ------------ | ------------ | ------------ |------------ |
-|fieldMark	|String|	Yes	|field designation, format field${ field ID}_field${ line number}|
-|viewAttr	|int	|Yes	|Change the status of the field ,1: ReadOnly ,2: Edit ,3: Required ,4: Hidden the field label and content|
+|fieldMark	|String|	Yes	|field designation, format field${field ID}_field${line number}|
+|viewAttr	|int	|Yes	|Change the status of the field ,1:Read-Only ,2:Editable ,3:Mandatory ,4:Hidden the field label and content|
 
 Example 
 ```javascript
@@ -292,15 +292,15 @@ WfForm.changeFieldAttr ("field110",1);// field changed to read-only
 WfForm.changeFieldAttr ("field110",4);// field label and content are hidden, the effect is consistent with the display attribute hidden, only support the main table field
 ```
 
-### 3.5 Modify field values and display propert
+### 3.5 Modify field values and display properties
 > changeSingleField：function simultaneously (fieldMark, valueInfo, variableInfo)
 
 Parameter Description
 
 |Parameter |type	|Required|	Remarks|
 | ------------ | ------------ | ------------ |------------ |
-|fieldMark	|String|	Yes	|field designation, format field${ field ID}_field${ line number}|
-|valueInfo	|JSON	|No|Field value information, consistent with interface 2 format, example :{ value：" modified value "}|
+|fieldMark	|String|	Yes	|field designation, format field${fieldID}_field${linenumber}|
+|valueInfo	|JSON	|No|Field value information, consistent with interface 2 format, example :{value：" modified value "}|
 |variableInfo	|JSON	|No	|Change property, example :{ viewAttr：3}|
 
 Example
@@ -347,8 +347,8 @@ Parameter Description
 
 ```javascript
 // form opens the linkage to enforce a field linkage
-jQuery (document). ready (function (){
- WfForm.triggerFieldAllLinkage ("field110");// execute all linkage involved in the  field
+jQuery(document).ready(function(){
+ WfForm.triggerFieldAllLinkage("field110");// execute all linkage involved in the  field
 });
 ```
 
@@ -377,22 +377,22 @@ Return value propoeties description
 WfForm.getFieldInfo("111");
 ```
 
-### 3.9 Get field current read-only/required properties
+### 3.9 Get field current read-only/mandatory properties
 
 > This method is to obtain field display properties in real time, including possible changes such as display property linkage, code interface change, done, detail existing fields can not be modified, not only field properties of background configuration;
 >
-> if you only want to obtain field properties of background configuration, call interface 3.8 return value viewattr property 
+> If you only want to obtain field properties of background configuration, call interface 3.8 return value viewattr property 
 > 
-> getFieldCurViewAttr：function (fieldMark)
+> getFieldCurViewAttr：function(fieldMark)
 
 Parameter Description
 
 |Parameter |type	|Required|	Remarks|
 | ------------ | ------------ | ------------ |------------ |
-|fieldMark	|String|	Yes	|field designation, format field${ field ID}_field${ line number}|
+|fieldMark	|String|	Yes	|field designation, format field${fieldID}_field${linenumber}|
 
 ```javascript
- WfForm.getFieldCurViewAttr ("field 110_2");// Get detail field properties ,1: read-only ,2: editable ,3: required; all done read-only;
+ WfForm.getFieldCurViewAttr("field110_2");// Get detail field properties ,1: read-only ,2: editable ,3: mandatory; all done read-only;
 ```
 
 
@@ -412,8 +412,8 @@ Parameter Description
 |funobj|	Function|	Yes|	The function passes the following three parameters by default, parameter 1: the DOM object of the trigger field, parameter 2: the mark of the trigger field (field27555, etc.), parameter 3: the modified value|
 
 ```javascript
-WfForm.bindFieldChangeEvent ("field27555, field27556", function (obj, id, value){
- console.log (" Wform.bindFieldChange Event --", obj, id, value);
+WfForm.bindFieldChangeEvent("field27555,field27556",function(obj, id, value){
+ console.log ("Wform.bindFieldChangeEvent--", obj, id, value);
 });
 ```
 
@@ -429,14 +429,14 @@ Parameter Description
 |funobj	|Function	|Yes	|Field value changes trigger custom functions, which by default pass the following three parameters, parameter 1: field mark (field27583), parameter 2: line mark, parameter 3: modified value|
 
 ```javascript
-jQuery (document). ready (function (){
- WfForm.bindDetailFieldChangeEvent (" field 27583, field 27584", function (id, rowIndex, value){
- console.log (" Wform.bindDetailFieldChangeEvent --", id, rowIndex, value);
+jQuery(document).ready(function(){
+ WfForm.bindDetailFieldChangeEvent("field27583, field27584", function(id, rowIndex, value){
+ console.log(" Wform.bindDetailFieldChangeEvent --", id, rowIndex, value);
     });
 });
 ```
 
-4.3 Ffield area binding action event
+4.3 Field area binding action event
 > Recommend to use this method to develop, because this interface click, double-click and other actions are not bound to the field element, the interface bound to the cell
 > All functions can be implemented in a formula
 
@@ -464,13 +464,13 @@ Parameter Description
 Example 
 
 ```javascript
-WfForm.bindFieldAction (" onfocus "," field111, field222", function (fieldid, rowIndex){
-     Gets the focus trigger event alert(" single-line text field 111");
+WfForm.bindFieldAction("onfocus ","field111, field222", function(fieldid, rowIndex){
+     Gets the focus trigger event alert("single-line text field111");
      alert (get focus trigger event in line 222 of the "detail +rowIndex+");
 });
 
 
-WfForm.bindFieldAction (" onclick "," field333", function (){
+WfForm.bindFieldAction("onclick ","field333",function(){
      Click the trigger event alert(" the browse button field, not the magnifying glass selection, but the entire field in the cell area click will trigger "(");
 });
 ```
@@ -500,13 +500,13 @@ Parameter Description
 Example 
 
 ```javascript
-WfForm.proxyFieldComp (" field111", React.createElement (" div "),{
+WfForm.proxyFieldComp("field111", React.createElement(" div "),{
      style：{background："red"}, 
      children：" sub-items "
 }));
 // Custom rendering when Field 111 is read-only, editable, and required
 
-WfForm.proxyFieldComp (" field222_1","<div> custom rendering field </div>","2,3");
+WfForm.proxyFieldComp ("field222_1","<div> custom rendering field</div>","2,3");
 // Custom rendering when Detail table field 222 is editable/required
 ```
 
@@ -523,9 +523,9 @@ WfForm.proxyFieldComp (" field222_1","<div> custom rendering field </div>","2,3"
 Example 
 
 ```javascript
-WfForm.afterFieldComp (" field111"),
-React.createElement (" a "),{
-     href："/test.jsp? userid="+WfForm.getFieldValue "(" field222"),
+WfForm.afterFieldComp("field111"),
+React.createElement("a"),{
+     href："/test.jsp? userid="+WfForm.getFieldValue "("field222"),
      children：" Custom link "
 }));
 // Field 111 Appends and renders a custom link with read-only, editable, and required
@@ -560,20 +560,20 @@ Function Parameters of Proxy
 Example 
 
 ```javascript
-WfForm.proxyFieldContentComp ("111", function (info, compFn){
-     console.log (" field id：",info.fieldid);
-     console.log (" line number :", info.rowIndex);
-     console.log (" field-only required attribute :", info.viewAttr);
-     console.log (" field value :", info.fieldValue);
+WfForm.proxyFieldContentComp("111",function(info, compFn){
+     console.log ("fieldid：",info.fieldid);
+     console.log ("line number :", info.rowIndex);
+     console.log ("field-only required attribute :", info.viewAttr);
+     console.log ("fieldvalue :", info.fieldValue);
     // Returns custom rendered components 
-     return React.createElement (" div ",{},[" play as you want ");
+     return React.createElement ("div",{},["play as you want");
      // Return the original component 
      return compFn();
      // Returns a copy component based on the original component 
-     return React.createElement (" div ",{},[" pre-component ", compFn()," post-component "]);
+     return React.createElement ("div",{},["pre-component", compFn()," post-component "]);
 });
 // If this interface call is made in blocks of code, custompage, etc .(non-module before loading), render fields once
-WfForm.forceRenderField (" field111");
+WfForm.forceRenderField("field111");
 ```
 
 
@@ -600,15 +600,15 @@ Step 2: Custom typesetting rendering area_1 area
 ReactDOM.render <div>
      <table>
          <tr>
-             <td>{ WfForm.generateFieldContentComp (" field111_1")}</td>
-             <td>{ WfForm.generateFieldContentComp (" field112_1")}</td>
+             <td>{WfForm.generateFieldContentComp("field111_1")}</td>
+             <td>{WfForm.generateFieldContentComp("field112_1")}</td>
          </tr>
          <tr>
-             <td>{ WfForm.generateFieldContentComp (" field113_1")}</td>
-             <td>{ WfForm.generateFieldContentComp (" field114_1")}</td>
+             <td>{WfForm.generateFieldContentComp("field113_1")}</td>
+             <td>{WfForm.generateFieldContentComp("field114_1")}</td>
          </tr>
      </table>
-</div>, document.getElementByclassName (" area_1");//for reference only, parameter 2 is to distinguish row numbers from specific cells
+</div>, document.getElementByclassName ("area_1");//for reference only, parameter 2 is to distinguish row numbers from specific cells
 ```
 
 ## 5. Detail table operation interface
@@ -647,8 +647,8 @@ WfForm.addDetailRow (" detail_1",{[ beginfield ]:{ value :"2019-03-01"}})
 Example
 
 ```javascript
-WfForm.delDetailRow (" detail_1"," all ");// Delete all lines in detail 1
-WfForm.delDetailRow (" detail_1","3,6");// Delete line 3,6 in detail 1
+WfForm.delDetailRow("detail_1","all");// Delete all lines in detail 1
+WfForm.delDetailRow("detail_1","3,6");// Delete line 3,6 in detail 1
 ```
 
 ### 5.3 Select sepecified row or all row 
@@ -666,10 +666,10 @@ Parameter Description
 Example
 
 ```javascript
-WfForm.checkDetailRow (" detail_2"," all ");// tick all lines in detail 2
-WfForm.checkDetailRow (" detail_2"," true ";// Clear detail 2 All selected
-WfForm.checkDetailRow (" detail_2","3,6", true);// Clear detail 2 All selected, then tick the row marked 3,6
- WfForm.checkDetailRow (" detail_2","7", false); 
+WfForm.checkDetailRow("detail_2","all");// tick all lines in detail 2
+WfForm.checkDetailRow("detail_2","true";// Clear detail 2 All selected
+WfForm.checkDetailRow("detail_2","3,6", true);// Clear detail 2 All selected, then tick the row marked 3,6
+ WfForm.checkDetailRow("detail_2","7", false); 
 // Keep the selected record and append the selected row marked 7
 ```
 
@@ -684,7 +684,7 @@ Parameter Description
 Example
 
 ```javascript
-console.log (Wform.getDetailAllRowIndexStr (" detail_2");// Output 1.3.etc
+console.log(Wform.getDetailAllRowIndexStr("detail_2");// Output 1.3.etc
 ```
 ### 5.5 Get selected row index of detail table
 > Minimum Version: KB900190501
@@ -699,7 +699,7 @@ Parameter Description
 
 Example 
 ```javascript
-console.log (Wform.getDetailCheckedRowIndexStr (" detail_2");// output select line 1.3.etc
+console.log(Wform.getDetailCheckedRowIndexStr("detail_2");// output select line 1.3.etc
 ```
 
 ### 5.6 Controls whether the detail line check box disables the tick
@@ -715,8 +715,8 @@ Parameter Description
 |disableCheck|boolean|true|true： not allow; false： allowed|
 
 ```javascript
-WfForm.controlDetailRowDisableCheck (" detail_1"," all ", true);// Detail 1 All rows check boxes are not checked
-WfForm.controlDetailRowDisableCheck (" detail_1","1,2", false);
+WfForm.controlDetailRowDisableCheck("detail_1","all", true);// Detail 1 All rows checkboxes are not checked
+WfForm.controlDetailRowDisableCheck("detail_1","1,2", false);
 // Detail 1 row marked 1,2 row release ash, allow tick
 ```
 
@@ -733,8 +733,8 @@ Parameter Description
 |needHide|boolean|true|Hide rows, true： hide, false： display|
 
 ```javascript
-WfForm.controlDetailRowDisplay (" detail_1","3,5", true);/The hidden display of line 1 marked 3,5 is not shown
-WfForm.controlDetailRowDisplay (" detail_1"," all ", false);
+WfForm.controlDetailRowDisplay ("detail_1","3,5", true);/The hidden display of line 1 marked 3,5 is not shown
+WfForm.controlDetailRowDisplay ("detail_1","all", false);
 // Detail 1 All lines are not hidden
 ```
 
@@ -749,7 +749,7 @@ Parameter Description
 |fieldMark|String|Yes|field designation, format field${ field ID}_field${ line number} for locating which list belongs|
 
 ```javascript
-WfForm.getDetailRowKey (" field 112_3");// Gets the primary key in the fourth line of detail 
+WfForm.getDetailRowKey("field 112_3");// Gets the primary key in the fourth line of detail 
 ``` 
 
 ### 5.9 Get count of row lines
@@ -763,7 +763,7 @@ Parameter Description
 
 Example
 ```javascript
-console.log (Wform.getDetailRowCount (" detail_2");// output detail head office number, note that this result only represents detail head office number, can not be used as loop line
+console.log (Wform.getDetailRowCount("detail_2");// output detail head office number, note that this result only represents detail head office number, can not be used as loop line
 ```
 
 ### 5.10 Add lines, delete line pre-action(logic or block event)
@@ -797,8 +797,8 @@ Description	Parameter
 |needCopy|Boolean|Yes|true： enable, false： disable|
 
 ```javascript
-jQuery (document). ready (function (){
-     WfForm.setDetailAddUseCopy (" detail_1", true);
+jQuery(document).ready(function(){
+     WfForm.setDetailAddUseCopy("detail_1", true);
 });
 ```
 
@@ -817,8 +817,8 @@ Description	Parameter
 
 Example 
 ```javascript
-WfForm.getDetailRowSerailNum (" detail_1",3);// Gets a row number marked 3 in detail 1
-WfForm.getDetailRowSerailNum (" field222_3");// Gets the row number marked 3 under the corresponding list of fields 222
+WfForm.getDetailRowSerailNum("detail_1",3);// Gets a row number marked 3 in detail 1
+WfForm.getDetailRowSerailNum("field222_3");// Gets the row number marked 3 under the corresponding list of fields 222
 ```
 
 ## 6. common global interface
@@ -829,7 +829,7 @@ WfForm.getDetailRowSerailNum (" field222_3");// Gets the row number marked 3 und
 > getBaseInfo：function()
 
 ```javascript
-console.log (Wform.getBaseInfo ();// Returns the underlying information for the current request 
+console.log(Wform.getBaseInfo();// Returns the underlying information for the current request 
 // Output description:
 {
      f_weaver_belongto_userid："5240"//user information 
@@ -854,8 +854,8 @@ Parameter Description
 |duration|Float|false|How long automatically disappears, per second, default is 1.5 seconds|
 
 ```javascript
-WfForm.showMessage(" end time should be greater than start time ")// warning information should disappear automatically after 1.5 s "); and
-WfForm.showMessage(" operation error ",2,10);// error message disappeared after 10s
+WfForm.showMessage("end time should be greater than start time")// warning information should disappear automatically after 1.5 s "); and
+WfForm.showMessage("operation error",2,10);// error message disappeared after 10s
 ```
 
 ### 6.3 System style Confirm message box description
@@ -872,10 +872,10 @@ Parameter Description
 |otherInfo|Object|No|Custom information (button name)|
 
 ```javascript
-WfForm.showConfirm (" confirm to delete? ", function(){
-     alert(" Delete successfully "); 
+WfForm.showConfirm("confirm to delete?", function(){
+     alert("Delete successfully"); 
 });
-WfForm.showConfirm (" Do you need any technical support? ", function(){
+WfForm.showConfirm("Do you need any technical support?", function(){
      alert("Click confirm to call some functions or trigger some event");
 }, function(){
      alert(Click Cancel to call some functions or trigger some event);
@@ -897,10 +897,10 @@ Parameter Description
 |isDisabled|boolean|Yes|true：button all disable can not be operated, false： recovery button can be operated|
 
 ```javascript
-     function subimtForm (params){
-         WfForm.controlBtnDisabled (true);// action button ash 
+     function subimtForm(params){
+         WfForm.controlBtnDisabled(true);// action button ash 
         ...
-         WfForm.controlBtnDisabled (false);
+         WfForm.controlBtnDisabled(false);
     }
 ```
 	
@@ -915,15 +915,15 @@ Parameter Description
 |type|String|Yes|Button|type (console can be mobx.toJS (Wform.getGlobalStore (). rightMenu.rightMenus) type)|
 
 ```javascript
-WfForm.doRightBtnEvent (" BTN_SUBBACKNAME ");// Feedback required to trigger submission
-WfForm.doRightBtnEvent (" BTN_SUBMIT ");// no feedback required to trigger submission
-WfForm.doRightBtnEvent (" BTN_WFSAVE ");// Trigger save
-WfForm.doRightBtnEvent (" BTN_REJECTNAME ");// trigger return
-WfForm.doRightBtnEvent (" BTN_FORWARD ");// Trigger forwarding
-WfForm.doRightBtnEvent (" BTN_REMARKADVICE ");// Trigger Consultation
-WfForm.doRightBtnEvent (" BTN_TURNTODO ");// Trigger transfer
-WfForm.doRightBtnEvent (" BTN_DORETRACT ");// Trigger forced recovery
-WfForm.doRightBtnEvent (" BTN_PRINT ");// Trigger print
+WfForm.doRightBtnEvent("BTN_SUBBACKNAME");// Feedback required to trigger submission
+WfForm.doRightBtnEvent("BTN_SUBMIT");// no feedback required to trigger submission
+WfForm.doRightBtnEvent("BTN_WFSAVE");// Trigger save
+WfForm.doRightBtnEvent("BTN_REJECTNAME");// trigger return
+WfForm.doRightBtnEvent("BTN_FORWARD");// Trigger forwarding
+WfForm.doRightBtnEvent("BTN_REMARKADVICE");// Trigger Consultation
+WfForm.doRightBtnEvent("BTN_TURNTODO");// Trigger transfer
+WfForm.doRightBtnEvent("BTN_DORETRACT");// Trigger forced recovery
+WfForm.doRightBtnEvent("BTN_PRINT");// Trigger print
 ```
 
 ### 6.6 Refresh the form page 
@@ -938,7 +938,7 @@ Parameter Description
 
 ```javascript
 WfForm.reloadPage();
-WfForm.reloadPage ({requestid :"11"});// coverage parameters
+WfForm.reloadPage({requestid :"11"});// coverage parameters
 ```
 
 ### 6.7 Mobile app open link method
@@ -955,8 +955,8 @@ Parameter Description
 Example 
 
 ```javascript
-window.showHoverWindow ('/workflow/test.jsp','/req');// main interface opens the link
-window.showHoverWindow (' https://www.baidu.com','/req/editDetailRow'');// The detail line edit interface opens the link
+window.showHoverWindow('/workflow/test.jsp','/req');// main interface opens the link
+window.showHoverWindow('https://www.baidu.com','/req/editDetailRow'');// The detail line edit interface opens the link
 ```
 
 ### 6.8 Extend parameters send to server
@@ -974,7 +974,7 @@ Parameter Description
 |obj|Object|No|JSON Format Custom Parameters|
 
 ```javascript
-WfForm.appendSubmitParam ({cus_param1:"11", cus_param2:" Test "});// The server can take parameter value request.getParameter through the request object (" cus_param1"):
+WfForm.appendSubmitParam({cus_param1:"11", cus_param2:" Test "});// The server can take parameter value request.getParameter through the request object (" cus_param1"):
 ```
 
 ### 6.9 Get the first required field
@@ -1026,7 +1026,7 @@ Parameter Description
 |jsonParam|JSON|Yes|url|parameters extended, JSON key-value format|
 
 ```javascript
- WfForm.appendBrowserDataUrlParam (" field395",{" customerid ":"2"});// Add url parameter customerid to browse button 395 when requesting background data
+ WfForm.appendBrowserDataUrlParam("field395",{"customerid ":"2"});// Add url parameter customerid to browse button 395 when requesting background data
  ```
  
 ### 7.2 Gets the display valye for browser buttom
@@ -1043,7 +1043,7 @@ Parameter Description
 |splitChar|String|No|delimiter, separated by comma by default|
 
 ```javascript
- WfForm.getBrowserShowName (" field110");// Gets a comma-separated browse button field display value
+ WfForm.getBrowserShowName("field110");// Gets a comma-separated browse button field display value
  ```
 ### 7.3 Remove the option value from slection box
 > Limit condition: Only for selection box
@@ -1057,7 +1057,7 @@ Parameter Description
 |optionKeys|String|Yes|Option options key values to be removed, multiple separated by commas|
 
 ```javascript
- WfForm.removeSelectOption (" field 112","3,4");// Removes the option in id selection box with a value of 3/4
+ WfForm.removeSelectOption("field112","3,4");// Removes the option in id selection box with a value of 3/4
  ```
  
 ### 7.4 Control selection box field option 
@@ -1073,8 +1073,8 @@ Parameter Description
 |optionKeys|String|Yes|Fully control the range of options in the selection box|
 
 ```javascript
-WfForm.controlSelectOption (" field 112","1,2,4");// The control selection box shows only 1/2/4 options
-WfForm.controlSelectOption (" field 112","");// Clear all options in the box
+WfForm.controlSelectOption("field112","1,2,4");// The control selection box shows only 1/2/4 options
+WfForm.controlSelectOption("field112","");// Clear all options in the box
 ```
 
 ### 7.5 Gets the display value of the selection box
@@ -1091,7 +1091,7 @@ Parameter Description
 |splitChar|String|No|Separator, separated by comma by default (used only with multiple checkboxes)|
 
 ```javascript
- WfForm.getSelectShowName (" field110_3");// Gets the value displayed in the field of the selection box
+ WfForm.getSelectShowName("field110_3");// Gets the value displayed in the field of the selection box
  ```
  
 ### 7.6 When text field is editable, if empty value display default gray prompt, mouse click input prompt disappear
@@ -1107,10 +1107,10 @@ Parameter Description
 |showContent|String|Yes|Hint information displayed when null, gray|
 
 ```javascript
-jQuery (document). ready (function (){
- WfForm.setTextFieldEmptyShowContent (" field 27555"," single text default prompt information 1");
- WfForm.setTextFieldEmptyShowContent (" field 27566"," Multi-text default prompt 2");
- WfForm.setTextFieldEmptyShowContent (" field222_0"," detail field prompt information ");// need to be used in conjunction with additional row events in interface 5.9
+jQuery(document).ready(function(){
+ WfForm.setTextFieldEmptyShowContent("field 27555"," single text default prompt information 1");
+ WfForm.setTextFieldEmptyShowContent("field 27566"," Multi-text default prompt 2");
+ WfForm.setTextFieldEmptyShowContent("field222_0"," detail field prompt information ");// need to be used in conjunction with additional row events in interface 5.9
 });
 ```
 
@@ -1128,7 +1128,7 @@ Parameter Description
 |jsonParam|JSON|Yes|Extending or copying props parameters|
 
 ```javascript
-Example WfForm.overrideBrowserProp (" field111"){
+Example WfForm.overrideBrowserProp("field111"){
  onBeforeFocusCheck：function (success, failure){/***/}
 });// Copy the props of the Browse button field 111
 ```
@@ -1148,9 +1148,9 @@ Parameter Description
 |end|String	No|Format and start parameters consistent|
 
 ```javascript
-Example WfForm.controlDateRange (" field111",-5,10);// Limit the optional range of dates, five days forward and 10 days later
-WfForm.controlDateRange (" field111",0,'2019-12-31')// Limit today to this year
-WfForm.controlDateRange (" field222_0",'2019-05-01','2019-05-31');// detail field, limiting the month
+Example WfForm.controlDateRange("field111",-5,10);// Limit the optional range of dates, five days forward and 10 days later
+WfForm.controlDateRange("field111",0,'2019-12-31')// Limit today to this year
+WfForm.controlDateRange("field222_0",'2019-05-01','2019-05-31');// detail field, limiting the month
 ```
 
 ### 7.9 Control whether radio button  printing only shows select text
@@ -1197,8 +1197,8 @@ Parameter Description
 
 Example
 ```javascript
-WfForm.setSignRemark(" override the content of the signature setting comment ");
-WfForm.setSignRemark (" additional request for approval before the original opinion ", false,false);
+WfForm.setSignRemark("override the content of the signature setting comment ");
+WfForm.setSignRemark("additional request for approval before the original opinion ", false,false);
 ```
 
 ### 8.3 Extended Signature comments bottom buttons
@@ -1214,7 +1214,7 @@ Parameter Description
 
 ```javascript
 WfForm.appendSignEditorBottomBar ([
- React.createElement (" div ",{ className :" wf-req-signbtn ", children :" custom button 1"}),
+ React.createElement("div ",{className :" wf-req-signbtn ", children :" custom button 1"}),
  <div> custom button 2</ div<div>
 ]);
 ```
