@@ -1,0 +1,61 @@
+//Edit data and time plugin
+
+// put all the files to userDefined/Script/
+// if the component is data and time, please set the class as dataTimePart
+
+<link rel="stylesheet" href="../../userDefined/Script/datepicker/css/datepicker.css">
+<style>
+	.dateTimePart .J-day{ width: 165px; }
+	.dateTimePart .only-date{ border: 0; width: calc(100% - 16px); }
+</style>
+
+
+<script src="../../userDefined/Script/datepicker/js/jquery-1.7.js"></script>
+<script src="../../userDefined/Script/datepicker/js/moment.min.js"></script>
+<script src="../../userDefined/Script/datepicker/js/datepicker.all.js"></script>
+<script src="../../userDefined/Script/datepicker/js/jquery-clock-timepicker.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+	    //Add Data filed name
+	    var idList = [{dateId: "field7911", timeId: "field8482"}, {dateId: "field7912", timeId: "field8483"}]
+	    $(".dateTimePart").each(function(i, ele){
+			$(ele).append('<div class="c-datepicker-date-editor c-datepicker-single-editor J-day"><i class="c-datepicker-range__icon kxiconfont icon-clock"></i><input type="text" data-index="' + i + '" autocomplete="off" name="" placeholder="Choose date" class="c-datepicker-data-input only-date" value="' + $("#" + idList[i].dateId).val() + ' '+ $("#" + idList[i].timeId).val() + '" ></div>');
+		});
+		$('.J-day').datePicker({
+			hasShortcut:true,
+			format: 'YYYY-MM-DD HH:mm',
+			shortcutOptions:[
+				{
+					name: 'One Week Ago',
+					day: '-7',
+					time: '00:00'
+				}, {
+					name: 'Yesterday',
+					day: '-1',
+					time: '00:00'
+				}, {
+					name: 'Today',
+					day: '0'
+				}, {
+					name: 'Tomorrow',
+					day: '1',
+					time: '00:00'
+				}, {
+					name: 'One Week Later',
+					day: '7',
+					time: '00:00'
+				}
+			],
+			hide:function(){
+				var date = this.$input.val();
+				var dataList = date.split(" ");
+
+				var index = this.$input[0].dataset.index;
+				$("#" + idList[index].dateId).val(dataList[0]);
+				$("#" + idList[index].dateId + "span").text(dataList[0]);
+				$("#" + idList[index].timeId).val(dataList[1]);
+				$("#" + idList[index].timeId + "span").text(dataList[1]);
+			}
+		});
+	});
+</script>
