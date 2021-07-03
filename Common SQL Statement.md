@@ -226,3 +226,10 @@ from  workflow_requestLog t1,workflow_requestbase t2
 where t1.requestid=t2.requestid
 order by t1.operatedate desc,t1.operatetime desc
 ```
+
+### 20. Get exit condition
+```sql
+select a.workflowid,c.workflowname, a.nodeid,d.nodename,a.linkname,b.rulename,b.condit  
+from workflow_nodelink a,rule_base b ,workflow_base c,workflow_nodebase d
+where  b.linkid=a.id and a.workflowid=c.id and a.nodeid =d.id 
+```
