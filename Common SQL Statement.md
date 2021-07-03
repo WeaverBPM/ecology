@@ -233,3 +233,23 @@ select a.workflowid,c.workflowname, a.nodeid,d.nodename,a.linkname,b.rulename,b.
 from workflow_nodelink a,rule_base b ,workflow_base c,workflow_nodebase d
 where  b.linkid=a.id and a.workflowid=c.id and a.nodeid =d.id 
 ```
+
+### 21. Check any statement make CPU usage too high
+#### 21.1 Check field linkage = assign field
+```sql
+select *
+  from workflow_base
+ where id in
+       (select distinct workflowid
+          from (select main.id, entry.triggerfieldname, entry.workflowid
+                  from workflow_datainput_entry entry
+                  left join workflow_datainput_main main
+                    on main.entryid = entry.id) t1,
+               (select * from workflow_datainput_field where type = 2) t2
+         where t2.datainputid = t1.id
+           and t2.pagefieldname = t1.triggerfieldname)
+```
+#### 21.2 check field attribute
+```sql
+select * from workflow_nodefieldattr where  attrcontent like '%'+cast(fieldid as varchar)+'%'
+```
