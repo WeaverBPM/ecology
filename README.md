@@ -3,6 +3,8 @@
 You could contact us @:<br>
 Website: www.weaverintl.com<br>
 Email: support@weaverintl.com<br>
+Partnership: partner@weaverintl.com<br>
+Demo request: https://weaverintl.com/demo-request/ <br>
 
 ### E-cology Workflow Engine Form API
 Please click to check [From API](./Workflow%20From%20Engine%20API.md) Details
