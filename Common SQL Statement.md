@@ -1,6 +1,9 @@
 # ECOA-Common-Script
 Common script for ECOA
 
+**Website:** www.weaverintl.com <br>
+**Technical support:** support@weaverintl.com <br>
+
 ### 1. Enable sql log
 Configuration file：ecology\WEB-INF\prop\weaver_isSqlLog.properties<br>
 
