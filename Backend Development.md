@@ -2,9 +2,8 @@
 
 **Author:** Weaver International Technical Delivery Team<br>
 **Date:** 25-Dec-2020<br>
-**Telephone:** +6569085816<br>
-**Website:** www.weaver.com.sg<br>
-**Email:** sales@weaver.com.sg<br>
+**Website:** www.weaverintl.com<br>
+**Email:** sales@weaverintl.com<br>
 
 ## 1. Install idea and e-code
 > Weaver suggest idea as the development IDE, please check www.jetbrains.com for more details.
